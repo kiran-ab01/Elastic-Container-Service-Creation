@@ -30,6 +30,18 @@ data "aws_subnets" "default" {
 }
 
 # ----------------------------------------
+# AUTO-DISCOVER DEFAULT SECURITY GROUP
+# ----------------------------------------
+data "aws_security_group" "default" {
+  filter {
+    name   = "group-name"
+    values = ["default"]
+  }
+
+  vpc_id = data.aws_vpc.default.id
+}
+
+# ----------------------------------------
 # ECS Cluster
 # ----------------------------------------
 resource "aws_ecs_cluster" "ecs" {
@@ -62,7 +74,7 @@ resource "aws_ecs_task_definition" "task" {
 }
 
 # ----------------------------------------
-# ECS Service (NO MANUAL SUBNETS NEEDED)
+# ECS Service (AUTO SG + AUTO SUBNETS)
 # ----------------------------------------
 resource "aws_ecs_service" "service" {
   name            = "my-ecs-service-${var.env}"
@@ -73,7 +85,7 @@ resource "aws_ecs_service" "service" {
 
   network_configuration {
     subnets         = data.aws_subnets.default.ids
-    security_groups = var.security_group_ids
-    assign_public_ip = true    # set to true for default VPC
+    security_groups = [data.aws_security_group.default.id]
+    assign_public_ip = true
   }
 }
