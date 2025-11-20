@@ -1,4 +1,4 @@
-env                = "#{environment}"
+env                =  "#{environment}"
 aws_region         = "us-east-1"
 # aws_profile removed, credentials passed via Octopus
 ecs_task_role_arn  = "arn:aws:iam::741846357014:role/AWS-Destination-OIDC"
