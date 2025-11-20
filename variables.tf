@@ -8,10 +8,7 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-variable "aws_profile" {
-  type        = string
-  description = "AWS CLI profile for the environment"
-}
+
 
 variable "ecs_task_role_arn" {
   type        = string
