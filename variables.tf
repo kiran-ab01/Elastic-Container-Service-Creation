@@ -20,10 +20,10 @@ variable "image_uri" {
   description = "Full URI of the Docker image (including tag)"
 }
 
-variable "subnet_ids" {
-  type        = list(string)
-  description = "Private Subnets for ECS Tasks"
-}
+# variable "subnet_ids" {
+#  type        = list(string)
+#  description = "Private Subnets for ECS Tasks"
+# }
 
 variable "security_group_ids" {
   type        = list(string)
