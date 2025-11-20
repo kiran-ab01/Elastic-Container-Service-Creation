@@ -12,19 +12,33 @@ terraform {
 }
 
 provider "aws" {
-  region  = var.aws_region
+  region = var.aws_region
 }
 
-# -----------------------------
+# ----------------------------------------
+# AUTO-DISCOVER DEFAULT VPC AND SUBNETS
+# ----------------------------------------
+data "aws_vpc" "default" {
+  default = true
+}
+
+data "aws_subnets" "default" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
+}
+
+# ----------------------------------------
 # ECS Cluster
-# -----------------------------
+# ----------------------------------------
 resource "aws_ecs_cluster" "ecs" {
   name = "my-ecs-cluster-${var.env}"
 }
 
-# -----------------------------
+# ----------------------------------------
 # ECS Task Definition
-# -----------------------------
+# ----------------------------------------
 resource "aws_ecs_task_definition" "task" {
   family                   = "my-ecs-task-${var.env}"
   requires_compatibilities = ["FARGATE"]
@@ -47,9 +61,9 @@ resource "aws_ecs_task_definition" "task" {
   }])
 }
 
-# -----------------------------
-# ECS Service
-# -----------------------------
+# ----------------------------------------
+# ECS Service (NO MANUAL SUBNETS NEEDED)
+# ----------------------------------------
 resource "aws_ecs_service" "service" {
   name            = "my-ecs-service-${var.env}"
   cluster         = aws_ecs_cluster.ecs.id
@@ -58,8 +72,8 @@ resource "aws_ecs_service" "service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = var.subnet_ids
+    subnets         = data.aws_subnets.default.ids
     security_groups = var.security_group_ids
-    assign_public_ip = false
+    assign_public_ip = true    # set to true for default VPC
   }
 }
