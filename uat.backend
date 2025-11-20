@@ -2,4 +2,4 @@ bucket  = "aws-bucket-terraform-ecs"
 key     = "ecs/uat/terraform.tfstate"
 region  = "us-east-1"
 encrypt = true
-profile = "uat.backend"
+# profile = "uat.backend"
