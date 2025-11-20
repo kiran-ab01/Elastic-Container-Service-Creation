@@ -25,10 +25,7 @@ variable "image_uri" {
 #  description = "Private Subnets for ECS Tasks"
 # }
 
-variable "security_group_ids" {
-  type        = list(string)
-  description = "Security Groups for ECS Tasks"
-}
+
 
 variable "desired_count" {
   type    = number
