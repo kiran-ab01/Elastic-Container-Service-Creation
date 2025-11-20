@@ -1,6 +1,6 @@
 # -----------------------------
 # Load existing ECR Repository
-# -----------------------------
+# -----------------------------l
 data "aws_ecr_repository" "app" {
   name = var.ecr_repo_name   # Replace in terraform.tfvars
 }
